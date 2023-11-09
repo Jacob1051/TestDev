@@ -11,6 +11,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EquipementRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
+    collectionOperations: ["GET", "POST"],
+    itemOperations: ["DELETE", "PATCH"],
     denormalizationContext: ['groups' => ['equipment:write']],
     normalizationContext: ['groups' => ['equipment:read']],
 )]
