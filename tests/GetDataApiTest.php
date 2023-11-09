@@ -13,6 +13,6 @@ class GetDataApiTest extends ApiTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertResponseHeaderSame('content-type', 'application/ld+json; charset=utf-8');
-        $this->assertMatchesResourceCollectionJsonSchema(Equipement::class);
+        $this->assertMatchesResourceCollectionJsonSchema(Equipement::class); 
     }
 }
