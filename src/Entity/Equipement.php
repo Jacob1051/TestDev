@@ -2,7 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use App\Api\ApiDeleteEquipment;
+use App\Api\ApiCreateEquipment;
+use App\Api\ApiGetAllEquipment;
+use App\Api\ApiUpdateEquipment;
 use App\Repository\EquipementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,11 +18,44 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ORM\Entity(repositoryClass: EquipementRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource(
-    collectionOperations: ["GET", "POST"],
-    itemOperations: ["DELETE", "PATCH"],
     denormalizationContext: ['groups' => ['equipment:write']],
     normalizationContext: ['groups' => ['equipment:read']],
+    collectionOperations: [
+        "POST",
+        "get_all_equipment" => [
+            "method" => "GET",
+            "path" => "equipements",
+            "controller" => ApiGetAllEquipment::class,
+            "read" => false
+        ],
+    ],
+    itemOperations: [
+        "GET",
+        "delete_equipment" => [
+            "method" => "DELETE",
+            "path" => "equipements/{id}",
+            "controller" => ApiDeleteEquipment::class,
+            "read" => false
+        ],
+        "update_equipment" => [
+            "method" => "PATCH",
+            "path" => "equipements/{id}",
+            "controller" => ApiUpdateEquipment::class,
+            "read" => false,
+            "openapi_context" => [
+                "summary" => "Update Equipment",
+                "description" => "Update Equipment",
+            ]
+        ],
+
+    ],
+    paginationPartial: true,
+    paginationViaCursor: [
+        ['field' => 'id', 'direction' => 'ASC']
+    ]
 )]
+#[ApiFilter(OrderFilter::class, properties: ["id" => "ASC"])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'category' => 'partial', 'number' => 'exact'])]
 class Equipement
 {
     #[ORM\Id]
@@ -47,9 +87,13 @@ class Equipement
     #[Groups(["equipment:read"])]
     private ?\DateTimeInterface $updatedAt = null;
 
+    #[ORM\Column]
+    private ?bool $deleted = null;
+
     public function __construct()
     {
         $this->description = '';
+        $this->deleted = false;
     }
 
     public function getId(): ?int
@@ -135,5 +179,22 @@ class Equipement
         if ($this->createdAt == null) {
             $this->createdAt = new \DateTime('now');
         }
+    }
+
+    public function isDeleted(): ?bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): static
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    public function updateMe()
+    {
+        $this->updatedAt = new \DateTime('now');
     }
 }
