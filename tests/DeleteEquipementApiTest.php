@@ -19,4 +19,13 @@ class DeleteEquipementApiTest extends ApiTestCase
             static::getContainer()->get('doctrine')->getRepository(Equipement::class)->findOneBy(['id' => '1', 'deleted' => false])
         );
     }
+
+    public function testDeleteEquipementThatWasDeleted(): void
+    {
+        $client = static::createClient();
+
+        $client->request('DELETE', '/api/equipements/1');
+
+        $this->assertResponseStatusCodeSame(404);
+    }
 }

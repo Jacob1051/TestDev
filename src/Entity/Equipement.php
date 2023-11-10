@@ -57,7 +57,10 @@ use Symfony\Component\Validator\Constraints as Assert;
             "method" => "DELETE",
             "path" => "equipements/{id}",
             "controller" => ApiDeleteEquipment::class,
-            "read" => false
+            "read" => false,
+            "requirements" => [
+                "id" => "\d+"
+            ]
         ],
         "update_equipment" => [
             "method" => "PATCH",
@@ -217,6 +220,7 @@ class Equipement
         return $this;
     }
 
+    #[ORM\PreUpdate]
     public function updateMe()
     {
         $this->updatedAt = new \DateTime('now');

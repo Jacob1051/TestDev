@@ -24,8 +24,7 @@ class ApiUpdateEquipment extends AbstractController
         $equipement = $equipementRepository->findOneBy(['id' => $id, 'deleted' => false]);
 
         if($equipement){
-            $this->buildDataAccordingToClientData($equipmentDataFromClient, $equipement);
-            $equipement->updateMe();
+            $equipement = $this->buildDataAccordingToClientData($equipmentDataFromClient, $equipement);
 
             $equipementRepository->add($equipement, true);
         }else{
@@ -49,5 +48,7 @@ class ApiUpdateEquipment extends AbstractController
         foreach ($clientData as $property => $value) {
             $propertyAccessor->setValue($entity, $property, $value);
         }
+
+        return $entity;
     }
 }

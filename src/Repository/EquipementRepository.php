@@ -105,12 +105,12 @@ class EquipementRepository extends ServiceEntityRepository
         if($request->get('name')){
             $queryBuilder
                 ->andWhere('e.name LIKE :name')
-                ->setParameter('name', '"%'.$request->get('id').'%"');
+                ->setParameter('name', '%'.$request->get('name').'%');
         }
         if($request->get('category')){
             $queryBuilder
                 ->andWhere('e.category = :category')
-                ->setParameter('category', '"%'.$request->get('category').'%"');
+                ->setParameter('category', '%'.$request->get('category').'%');
         }
         if($request->get('number')){
             $queryBuilder

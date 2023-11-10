@@ -13,13 +13,16 @@ class ApiDeleteEquipment extends \Symfony\Bundle\FrameworkBundle\Controller\Abst
 {
     public function __invoke(string $id, EquipementRepository $equipementRepository): JsonResponse
     {
-        try {
+        $equipement = $equipementRepository->findOneBy(['id'=> $id, 'deleted'=> false]);
+
+        if($equipement){
             $equipementRepository->softDeleteById($id);
-        } catch (\Exception $exception) {
+        }else{
             return new JsonResponse([
-                'message' => 'An error occured: '.$exception->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                'message' => ''
+            ], Response::HTTP_NOT_FOUND);
         }
+
         return new JsonResponse([
             'message' => ''
         ], Response::HTTP_NO_CONTENT);
