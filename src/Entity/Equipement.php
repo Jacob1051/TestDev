@@ -116,10 +116,10 @@ class Equipement
 
     private ?string $category = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['equipment:read', 'equipment:write'])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
+    #[ORM\Column(length: 255)]
+    #[Groups(['equipment:read', 'equipment:write'])]
 
     private ?string $number = null;
 
@@ -281,8 +281,6 @@ class Equipement
 
 
     #[ORM\PreUpdate]
-
-
     public function updateMe()
     {
         $this->updatedAt = new DateTime('now');
