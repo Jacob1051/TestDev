@@ -7,7 +7,7 @@ use App\Entity\Equipement;
 
 class GetDataApiTest extends ApiTestCase
 {
-    public function testGetEquipementApi(): void
+    public function testGetEquipementApiWithoutParams(): void
     {
         $response = static::createClient()->request('GET', '/api/equipements');
 

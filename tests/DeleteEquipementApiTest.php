@@ -20,11 +20,20 @@ class DeleteEquipementApiTest extends ApiTestCase
         );
     }
 
-    public function testDeleteEquipementThatWasDeleted(): void
+    public function testDeleteEquipementWithNonExistentEquipment(): void
     {
         $client = static::createClient();
 
-        $client->request('DELETE', '/api/equipements/1');
+        $client->request('DELETE', '/api/equipements/100');
+
+        $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testDeleteEquipementWithDeletedEquipment(): void
+    {
+        $client = static::createClient();
+
+        $client->request('DELETE', '/api/equipements/100');
 
         $this->assertResponseStatusCodeSame(404);
     }

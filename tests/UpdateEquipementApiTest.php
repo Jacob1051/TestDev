@@ -7,7 +7,7 @@ use App\Entity\Equipement;
 
 class UpdateEquipementApiTest extends ApiTestCase
 {
-    public function testUpdateWithValidEquipementAndTheEquipementsNameAndCategoryShouldBeUpdatedAndTheOthersNot(): void
+    public function testUpdateWithValidEquipementAndTheEquipementsNameAndCategoryShouldBeUpdatedAndTheOtherPropertiesNot(): void
     {
         $oldEquipement = static::getContainer()->get('doctrine')->getRepository(Equipement::class)->findOneBy(['id' => '2']);
 

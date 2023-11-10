@@ -75,6 +75,7 @@ class EquipementRepository extends ServiceEntityRepository
             ->update('App\Entity\Equipement', 'e')
             ->set('e.deleted', true)
             ->where('e.id = :entityId')
+            ->andWhere('e.deleted = FALSE')
             ->setParameter('entityId', $id)
             ->getQuery()
             ->execute();
@@ -97,27 +98,27 @@ class EquipementRepository extends ServiceEntityRepository
         $queryBuilder
             ->where('e.deleted = FALSE');
 
-        if($request->get('id')){
+        if ($request->get('id')) {
             $queryBuilder
                 ->andWhere('e.id = :id')
                 ->setParameter('id', $request->get('id'));
         }
-        if($request->get('name')){
+        if ($request->get('name')) {
             $queryBuilder
                 ->andWhere('e.name LIKE :name')
                 ->setParameter('name', '%'.$request->get('name').'%');
         }
-        if($request->get('category')){
+        if ($request->get('category')) {
             $queryBuilder
                 ->andWhere('e.category = :category')
                 ->setParameter('category', '%'.$request->get('category').'%');
         }
-        if($request->get('number')){
+        if ($request->get('number')) {
             $queryBuilder
                 ->andWhere('e.number = :number')
                 ->setParameter('number', $request->get('number'));
         }
-        if($request->get('order')??['id']){
+        if (($request->get('order'))) {
             $queryBuilder->orderBy('e.id', $request->get('order')['id']);
         }
 

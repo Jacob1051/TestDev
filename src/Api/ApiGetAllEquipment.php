@@ -4,6 +4,7 @@
 namespace App\Api;
 
 
+use ApiPlatform\Doctrine\Orm\Paginator;
 use App\Repository\EquipementRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,7 +20,7 @@ class ApiGetAllEquipment extends AbstractController
     {
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): Paginator
     {
         return $this->equipementRepository->findAllWithPagination($request);
     }
