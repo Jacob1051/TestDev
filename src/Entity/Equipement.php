@@ -21,12 +21,42 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['equipment:write']],
     normalizationContext: ['groups' => ['equipment:read']],
     collectionOperations: [
-        "POST",
+//        "POST",
         "get_all_equipment" => [
             "method" => "GET",
             "path" => "equipements",
             "controller" => ApiGetAllEquipment::class,
             "read" => false
+        ],
+        "create_equipment" => [
+            "method" => "POST",
+            "read" => false,
+            "openapi_context" => [
+                "requestBody"=> [
+                    "content"=>[
+                        "application/json" => [
+                            "schema" => [
+                                "type" => "object",
+                                "properties" => [
+                                    "name" => [
+                                        "type" => "string"
+                                    ],
+                                    "category" => [
+                                        "type" => "string"
+                                    ],
+                                    "number" => [
+                                        "type" => "string"
+                                    ],
+                                    "description" => [
+                                        "type" => "string"
+                                    ]
+                                ],
+                                "required" => ["name", "category", "number", "description"]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
         ],
     ],
     itemOperations: [
@@ -52,7 +82,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     paginationPartial: true,
     paginationViaCursor: [
         ['field' => 'id', 'direction' => 'ASC']
-    ]
+    ],
 )]
 #[ApiFilter(OrderFilter::class, properties: ["id" => "ASC"])]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'name' => 'partial', 'category' => 'partial', 'number' => 'exact'])]
