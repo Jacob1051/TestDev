@@ -14,6 +14,7 @@ use App\Repository\EquipementRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EquipementRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -21,7 +22,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
     denormalizationContext: ['groups' => ['equipment:write']],
     normalizationContext: ['groups' => ['equipment:read']],
     collectionOperations: [
-//        "POST",
         "get_all_equipment" => [
             "method" => "GET",
             "path" => "equipements",
@@ -38,18 +38,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
                             "schema" => [
                                 "type" => "object",
                                 "properties" => [
-                                    "name" => [
-                                        "type" => "string"
-                                    ],
-                                    "category" => [
-                                        "type" => "string"
-                                    ],
-                                    "number" => [
-                                        "type" => "string"
-                                    ],
-                                    "description" => [
-                                        "type" => "string"
-                                    ]
+                                    "name" => ["type" => "string"],
+                                    "category" => ["type" => "string"],
+                                    "number" => ["type" => "string"],
+                                    "description" => ["type" => "string"]
                                 ],
                                 "required" => ["name", "category", "number", "description"]
                             ]
@@ -95,6 +87,7 @@ class Equipement
 
     #[ORM\Column(length: 255)]
     #[Groups(["equipment:read", "equipment:write"])]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -103,6 +96,7 @@ class Equipement
 
     #[ORM\Column(length: 255)]
     #[Groups(["equipment:read", "equipment:write"])]
+    #[Assert\NotBlank]
     private ?string $number = null;
 
     #[ORM\Column(type: Types::TEXT)]
